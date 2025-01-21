@@ -10,7 +10,8 @@ import SwiftUI
 struct NewWorkoutView: View {
     @State private var selectedBPM: Double = 100
     @State private var selectedGenre: String? = nil
-    @State private var workoutDuration: String = ""
+    @State private var workoutDurationText: String = ""
+    @State private var workoutDuration: Int? = nil
     @State private var isEditing = false;
     
     var body: some View {
@@ -198,10 +199,45 @@ struct NewWorkoutView: View {
                     }
                     .frame(height: 120)
                     .padding(.horizontal)
+                    
+                    // Workout Duration
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Ready to move? Enter your desired workout duration to get started!")
+                            .font(.headline)
+                        TextField("Enter a duration between 10 to 180 minutes", text: $workoutDurationText)
+                            .keyboardType(.numberPad)
+                            .foregroundColor(.black)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                            .onChange(of: workoutDurationText) { newValue in
+                                let filtered = newValue.filter {$0.isNumber}
+                                if filtered != newValue {
+                                    workoutDurationText = filtered
+                                }
+                                
+                                if let intValue = Int(filtered), intValue >= 10, intValue <= 180 {
+                                    workoutDuration = intValue
+                                } else {
+                                    workoutDuration = nil // Reset if invalid
+                                }
+                            }
+                    }
+                    .padding()
+                    .foregroundColor(AppColour.headerText)
+                    
+                    if let duration = workoutDuration {
+                        Text("Workout Duration: \(duration) minutes")
+                            .font(.footnote)
+                            .foregroundColor(AppColour.headerText)
+                            .padding(8)
+                    } else if !workoutDurationText.isEmpty {
+                        Text("Please enter a valid duration between 10 and 180 minutes.")
+                            .font(.footnote)
+                            .foregroundColor(.red)
+                            .padding(8)
+                    }
                 }
-                
-                
-                
+                .padding()
+                .foregroundColor(AppColour.headerText)
             }
         }
     }
