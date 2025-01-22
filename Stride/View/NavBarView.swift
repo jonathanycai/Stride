@@ -7,13 +7,12 @@
 
 import SwiftUI
 
-struct NavBar: View {
+struct NavBarView: View {
     var body: some View {
         TabView {
             // Profile Tab
             NavigationView {
-                Text("Profile View")
-                    .navigationTitle("Profile")
+                NewWorkoutView()
             }
             .tabItem {
                 Image(systemName: "person.fill")
@@ -41,10 +40,9 @@ struct NavBar: View {
             }
         }
         .accentColor(.blue) // Customize tab bar item color
-        .foregroundColor(App)
     }
 }
 
 #Preview {
-    NavBar()
+    NavBarView()
 }

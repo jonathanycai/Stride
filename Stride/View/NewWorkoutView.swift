@@ -12,7 +12,7 @@ struct NewWorkoutView: View {
     @State private var selectedGenre: String? = nil
     @State private var workoutDurationText: String = ""
     @State private var workoutDuration: Int? = nil
-    @State private var isEditing = false;
+    @State private var isEditing = false
     
     var body: some View {
         ZStack {
@@ -249,7 +249,7 @@ struct NewWorkoutView: View {
                         .padding()
                         .frame(maxWidth: .infinity)
                         .background(AppColour.lightButtonBackground)
-                        .cornerRadius(10)
+                        .cornerRadius(15)
                         .padding(.horizontal)
                 }
                 .padding(.bottom) // Adds spacing from the screen bottom
