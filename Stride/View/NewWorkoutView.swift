@@ -240,24 +240,23 @@ struct NewWorkoutView: View {
                     .padding()
                     .foregroundColor(AppColour.headerText)
                 }
+                Button(action: {
+                    // Navigation or action will go here
+                }) {
+                    Text("BEGIN WORKOUT")
+                        .font(.headline)
+                        .foregroundColor(.black)
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(AppColour.lightButtonBackground)
+                        .cornerRadius(10)
+                        .padding(.horizontal)
+                }
+                .padding(.bottom) // Adds spacing from the screen bottom
             }
             
-            Spacer()
-            
         }
-        Button(action: {
-            // Navigation or action will go here
-        }) {
-            Text("BEGIN WORKOUT")
-                .font(.headline)
-                .foregroundColor(.white)
-                .padding()
-                .frame(maxWidth: .infinity)
-                .background(Color.blue)
-                .cornerRadius(10)
-                .padding(.horizontal)
-        }
-        .padding(.bottom) // Adds spacing from the screen bottom
+        
     }
 }
 
