@@ -254,9 +254,7 @@ struct NewWorkoutView: View {
                 }
                 .padding(.bottom) // Adds spacing from the screen bottom
             }
-            
         }
-        
     }
 }
 

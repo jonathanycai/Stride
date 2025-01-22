@@ -8,6 +8,18 @@
 import SwiftUI
 
 struct NavBarView: View {
+    init() {
+        // Customize Tab Bar Appearance
+        let appearance = UITabBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = UIColor(AppColour.navBarBackground)
+        appearance.stackedLayoutAppearance.normal.iconColor = .white
+        appearance.stackedLayoutAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor.white]
+        UITabBar.appearance().standardAppearance = appearance
+        UITabBar.appearance().scrollEdgeAppearance = appearance
+    }
+    
+    
     var body: some View {
         TabView {
             // Profile Tab
@@ -39,7 +51,8 @@ struct NavBarView: View {
                 Text("Settings")
             }
         }
-        .accentColor(.blue) // Customize tab bar item color
+        .accentColor(.black)
+        .background(AppColour.navBarBackground.ignoresSafeArea(edges: .bottom))
     }
 }
 
