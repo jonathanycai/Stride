@@ -15,6 +15,8 @@ struct NewWorkoutView: View {
     @State private var isEditing = false
     
     var body: some View {
+
+        
         ZStack {
             AppColour.main.ignoresSafeArea()
             
@@ -240,9 +242,7 @@ struct NewWorkoutView: View {
                     .padding()
                     .foregroundColor(AppColour.headerText)
                 }
-                Button(action: {
-                    // Navigation or action will go here
-                }) {
+                NavigationLink(destination: CurrentWorkoutView()) {
                     Text("BEGIN WORKOUT")
                         .font(.headline)
                         .foregroundColor(.black)
@@ -259,5 +259,7 @@ struct NewWorkoutView: View {
 }
 
 #Preview {
-    NewWorkoutView()
+    NavigationView {
+        NewWorkoutView()
+    }
 }
