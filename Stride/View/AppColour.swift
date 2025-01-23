@@ -14,4 +14,5 @@ struct AppColour {
     static let buttonSelected = Color(red: 159/255, green: 159/255, blue: 159/255)
     static let lightButtonBackground = Color(red: 217/255, green: 217/255, blue: 217/255)
     static let navBarBackground = Color(red: 117/255, green: 117/255, blue: 117/255)
+    static let strideBlue = Color(red: 26/255, green: 56/255, blue: 254/255)
 }

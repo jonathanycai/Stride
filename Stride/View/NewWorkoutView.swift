@@ -127,12 +127,12 @@ struct NewWorkoutView: View {
                             .font(.system(size: 16, weight: .semibold))
                             .foregroundColor(AppColour.headerText)
                     }
-                    .padding()
+                    .padding(.bottom, 1)
                     
                     // Genre Selection
                     VStack(alignment: .leading, spacing: 16) {
                         Text("Choose your genre")
-                            .font(.headline)
+                            .font(.system(size: 20, weight: .bold))
                             .foregroundColor(AppColour.headerText)
                             .padding(.horizontal)
                         

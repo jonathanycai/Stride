@@ -18,43 +18,39 @@ struct NavBarView: View {
         UITabBar.appearance().standardAppearance = appearance
         UITabBar.appearance().scrollEdgeAppearance = appearance
     }
-    
-    
+
     var body: some View {
-        TabView {
-            // Profile Tab
-            NavigationView {
+        NavigationView {
+            TabView {
+                // Profile Tab
                 NewWorkoutView()
-            }
-            .tabItem {
-                Image(systemName: "person.fill")
-                Text("Profile")
-            }
-            
-            // Home Tab
-            NavigationView {
+                    .tabItem {
+                        Image(systemName: "person.fill")
+                        Text("Profile")
+                    }
+
+                // Home Tab
                 Text("Home View")
                     .navigationTitle("Home")
-            }
-            .tabItem {
-                Image(systemName: "house.fill")
-                Text("Home")
-            }
-            
-            // Settings Tab
-            NavigationView {
+                    .tabItem {
+                        Image(systemName: "house.fill")
+                        Text("Home")
+                    }
+
+                // Settings Tab
                 Text("Settings View")
                     .navigationTitle("Settings")
+                    .tabItem {
+                        Image(systemName: "gearshape.fill")
+                        Text("Settings")
+                    }
             }
-            .tabItem {
-                Image(systemName: "gearshape.fill")
-                Text("Settings")
-            }
+            .accentColor(.black)
         }
-        .accentColor(.black)
         .background(AppColour.navBarBackground.ignoresSafeArea(edges: .bottom))
     }
 }
+
 
 #Preview {
     NavBarView()

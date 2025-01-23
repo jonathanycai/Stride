@@ -8,8 +8,30 @@
 import SwiftUI
 
 struct StrideAnimation: View {
+    @State private var animateBloom = false
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        ZStack {
+            AppColour.main.ignoresSafeArea()
+            
+            // Blooming Circle
+            Circle()
+                .fill(AppColour.strideBlue)
+                .frame(width: animateBloom ? UIScreen.main.bounds.width * 3 : 0,
+                       height: animateBloom ? UIScreen.main.bounds.height * 3 : 0)
+                .scaleEffect(animateBloom ? 1 : 0)
+                .animation(Animation.easeOut(duration: 1.5), value: animateBloom)
+                .onAppear {
+                    animateBloom = true
+                }
+            
+            // Center Image
+            Image("S-3")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 200, height: 200)
+                .zIndex(1)
+        }
     }
 }
 
