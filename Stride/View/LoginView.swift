@@ -37,9 +37,9 @@ struct LoginView: View {
                         )
                         .multilineTextAlignment(.center)
                 }
-                .padding(.top, 50)
+                .padding(.top, 30)
                 
-                Spacer(minLength: 40)
+                Spacer(minLength: 120)
                 
                 // Input Fields
                 VStack(spacing: 16) {
@@ -107,6 +107,20 @@ struct LoginView: View {
                     .shadow(color: .black.opacity(0.2), radius: 5, x: 0, y: 3)
                 }
                 .padding(.horizontal, 32)
+                
+                Spacer(minLength: 30)
+                
+                // Register Button
+                Button(action: {
+                    // Register action here
+                }) {
+                    Text("Don't have an account? Register")
+                        .font(.system(size: 14))
+                        .foregroundColor(.white)
+                        .underline() // Underlined text for better visibility
+                }
+                .padding(.top, 20)
+                
             }
             .padding(.vertical, 40)
         }
