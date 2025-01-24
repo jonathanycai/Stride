@@ -7,7 +7,9 @@
 
 import SwiftUI
 
-struct LoginView: View {
+struct RegisterView: View {
+    @State private var firstName: String = ""
+    @State private var lastName: String = ""
     @State private var email: String = ""
     @State private var password: String = ""
     
@@ -39,15 +41,41 @@ struct LoginView: View {
                 }
                 .padding(.top, 30)
                 
-                Spacer(minLength: 120)
+                Spacer(minLength: 9)
                 
                 // Input Fields
                 VStack(spacing: 16) {
                     
-                    Text("Login to continue")
+                    Text("Register to continue")
                         .font(.system(size: 18, weight: .bold))
                         .foregroundColor(Color.white.opacity(0.8))
                         .padding(.top, 10)
+                    
+                    // First Name Field
+                    HStack {
+                        Image(systemName: "textformat")
+                            .foregroundColor(.gray.opacity(0.8))
+                        TextField("First Name", text: $firstName)
+                            .autocapitalization(.none)
+                            .foregroundColor(.black)
+                    }
+                    .padding()
+                    .background(Color.white.opacity(0.8))
+                    .cornerRadius(10)
+                    
+                    
+                    // Last Name Field
+                    HStack {
+                        Image(systemName: "textformat")
+                            .foregroundColor(.gray.opacity(0.8))
+                        TextField("Last Name", text: $lastName)
+                            .autocapitalization(.none)
+                            .foregroundColor(.black)
+                    }
+                    .padding()
+                    .background(Color.white.opacity(0.8))
+                    .cornerRadius(10)
+                    
                     
                     // Email Field
                     HStack {
@@ -85,12 +113,12 @@ struct LoginView: View {
                 }
                 .padding(.horizontal, 32)
                 
-                // Login Button
+                // Register Button
                 Button(action: {
-                    // Login action here (future implementation)
+                    // Register action here
                 }) {
                     HStack {
-                        Text("LOGIN")
+                        Text("REGISTER")
                             .font(.headline)
                             .foregroundColor(.white)
                         
@@ -110,15 +138,14 @@ struct LoginView: View {
                 
                 Spacer(minLength: 30)
                 
-                // Register NavigationLink
-                NavigationLink(destination: RegisterView()) {
-                    Text("Don't have an account? Register")
+                // Already have an account? Login
+                NavigationLink(destination: LoginView()) {
+                    Text("Already have an account? Login")
                         .font(.system(size: 14))
                         .foregroundColor(.white)
-                        .underline() // Underlined text for better visibility
+                        .underline()
                 }
                 .padding(.top, 20)
-                
             }
             .padding(.vertical, 40)
         }
@@ -127,7 +154,7 @@ struct LoginView: View {
 
 #Preview {
     NavigationView{
-        LoginView()
+        RegisterView()
     }
-    
+
 }
