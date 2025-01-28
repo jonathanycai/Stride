@@ -122,7 +122,7 @@ struct LoginView: View {
                         .foregroundColor(.white)
                         .underline() // Underlined text for better visibility
                 }
-                .padding(.top, 20)
+                .padding(.bottom, 20)
                 
             }
             .padding(.vertical, 40)

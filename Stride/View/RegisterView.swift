@@ -8,8 +8,7 @@
 import SwiftUI
 
 struct RegisterView: View {
-    @State private var firstName: String = ""
-    @State private var lastName: String = ""
+    @State private var name: String = ""
     @State private var email: String = ""
     @State private var password: String = ""
     
@@ -22,26 +21,24 @@ struct RegisterView: View {
             VStack(spacing: 40) {
                 // Welcome Text
                 VStack(spacing: 10) {
-                    Text("Welcome to Stride")
-                        .font(.system(size: 40, weight: .bold))
+                    Text("STRIDE")
+                        .font(.system(size: 80, weight: .bold))
                         .foregroundColor(.white)
                         .overlay(
-                            Text("Welcome to Stride")
-                                .font(.system(size: 40, weight: .bold))
+                            Text("STRIDE")
+                                .font(.system(size: 80, weight: .bold))
                                 .foregroundColor(Color.white.opacity(0.5))
                                 .offset(x: 4, y: 4)
                         )
                         .overlay(
-                            Text("Welcome to Stride")
-                                .font(.system(size: 40, weight: .bold))
+                            Text("STRIDE")
+                                .font(.system(size: 80, weight: .bold))
                                 .foregroundColor(Color.white.opacity(0.2))
                                 .offset(x: 8, y: 8)
                         )
                         .multilineTextAlignment(.center)
                 }
-                .padding(.top, 30)
-                
-                Spacer(minLength: 9)
+                .padding(.top, 250)
                 
                 // Input Fields
                 VStack(spacing: 16) {
@@ -55,20 +52,7 @@ struct RegisterView: View {
                     HStack {
                         Image(systemName: "textformat")
                             .foregroundColor(.gray.opacity(0.8))
-                        TextField("First Name", text: $firstName)
-                            .autocapitalization(.none)
-                            .foregroundColor(.black)
-                    }
-                    .padding()
-                    .background(Color.white.opacity(0.8))
-                    .cornerRadius(10)
-                    
-                    
-                    // Last Name Field
-                    HStack {
-                        Image(systemName: "textformat")
-                            .foregroundColor(.gray.opacity(0.8))
-                        TextField("Last Name", text: $lastName)
+                        TextField("Name", text: $name)
                             .autocapitalization(.none)
                             .foregroundColor(.black)
                     }
@@ -96,8 +80,6 @@ struct RegisterView: View {
                             .foregroundColor(.gray.opacity(0.8))
                         SecureField("Password", text: $password)
                             .foregroundColor(.black)
-                        
-                        Spacer()
                         
                         Button(action: {
                             // Forgot password action
@@ -129,14 +111,13 @@ struct RegisterView: View {
                     .frame(maxWidth: .infinity)
                     .padding()
                     .background(
-                        LinearGradient(gradient: Gradient(colors: [Color.orange, Color.yellow]), startPoint: .leading, endPoint: .trailing)
+                        LinearGradient(gradient: Gradient(colors: [Color.blue, Color.blue]), startPoint: .leading, endPoint: .trailing)
                     )
                     .cornerRadius(10)
                     .shadow(color: .black.opacity(0.2), radius: 5, x: 0, y: 3)
                 }
                 .padding(.horizontal, 32)
-                
-                Spacer(minLength: 30)
+    
                 
                 // Already have an account? Login
                 NavigationLink(destination: LoginView()) {
@@ -145,7 +126,7 @@ struct RegisterView: View {
                         .foregroundColor(.white)
                         .underline()
                 }
-                .padding(.top, 20)
+                .padding(.bottom, 20)
             }
             .padding(.vertical, 40)
         }
