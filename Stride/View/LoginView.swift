@@ -13,33 +13,38 @@ struct LoginView: View {
     
     var body: some View {
         ZStack {
-            // Background color
-            AppColour.strideBlue
-                .ignoresSafeArea()
+            
+            // Gradient background
+                        LinearGradient(
+                            gradient: Gradient(colors: [AppColour.strideBlue, AppColour.strideBlue]),
+                            startPoint: .top,
+                            endPoint: .bottom
+                        )
+                        .ignoresSafeArea()
+            
             
             VStack(spacing: 40) {
                 // Welcome Text
                 VStack(spacing: 10) {
-                    Text("Welcome to Stride")
-                        .font(.system(size: 40, weight: .bold))
+                    Text("STRIDE")
+                        .font(.system(size: 80, weight: .bold))
                         .foregroundColor(.white)
                         .overlay(
-                            Text("Welcome to Stride")
-                                .font(.system(size: 40, weight: .bold))
+                            Text("STRIDE")
+                                .font(.system(size: 80, weight: .bold))
                                 .foregroundColor(Color.white.opacity(0.5))
                                 .offset(x: 4, y: 4)
                         )
                         .overlay(
-                            Text("Welcome to Stride")
-                                .font(.system(size: 40, weight: .bold))
+                            Text("STRIDE")
+                                .font(.system(size: 80, weight: .bold))
                                 .foregroundColor(Color.white.opacity(0.2))
                                 .offset(x: 8, y: 8)
                         )
                         .multilineTextAlignment(.center)
                 }
-                .padding(.top, 30)
+                .padding(.top, 250)
                 
-                Spacer(minLength: 120)
                 
                 // Input Fields
                 VStack(spacing: 16) {
@@ -101,7 +106,7 @@ struct LoginView: View {
                     .frame(maxWidth: .infinity)
                     .padding()
                     .background(
-                        LinearGradient(gradient: Gradient(colors: [Color.orange, Color.yellow]), startPoint: .leading, endPoint: .trailing)
+                        LinearGradient(gradient: Gradient(colors: [AppColour.strideBlue, Color.blue]), startPoint: .leading, endPoint: .trailing)
                     )
                     .cornerRadius(10)
                     .shadow(color: .black.opacity(0.2), radius: 5, x: 0, y: 3)
