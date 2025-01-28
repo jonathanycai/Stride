@@ -86,7 +86,7 @@ struct RegisterView: View {
                         }) {
                             Text("Forgot")
                                 .font(.system(size: 14))
-                                .foregroundColor(Color.orange)
+                                .foregroundColor(AppColour.strideBlue)
                         }
                     }
                     .padding()
