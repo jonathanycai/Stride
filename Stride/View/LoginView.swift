@@ -81,7 +81,7 @@ struct LoginView: View {
                         }) {
                             Text("Forgot")
                                 .font(.system(size: 14))
-                                .foregroundColor(Color.orange)
+                                .foregroundColor(AppColour.strideBlue)
                         }
                     }
                     .padding()
@@ -106,7 +106,7 @@ struct LoginView: View {
                     .frame(maxWidth: .infinity)
                     .padding()
                     .background(
-                        LinearGradient(gradient: Gradient(colors: [AppColour.strideBlue, Color.blue]), startPoint: .leading, endPoint: .trailing)
+                        LinearGradient(gradient: Gradient(colors: [Color.blue, Color.blue]), startPoint: .leading, endPoint: .trailing)
                     )
                     .cornerRadius(10)
                     .shadow(color: .black.opacity(0.2), radius: 5, x: 0, y: 3)
