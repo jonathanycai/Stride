@@ -2,10 +2,10 @@ import SwiftUI
 
 //struct CurrentWorkoutView: View {
 //    var body: some View {
-//        
+//
 //        ZStack {
 //            AppColour.main.ignoresSafeArea()
-//            
+//
 //            VStack {
 //                Text("Current Workout")
 //                .font(
@@ -16,7 +16,7 @@ import SwiftUI
 //                .frame(width: 312, height: 28, alignment: .topLeading)
 //
 //            }
-//            
+//
 //        }
 //    }
 //}
@@ -27,8 +27,10 @@ import SwiftUI
 //
 //
 struct CurrentWorkoutView: View {
-    @State private var elapsedTime: TimeInterval = 606 // Example time (10:06)
-    @State private var totalDuration: TimeInterval = 1200 // Example full workout time (20:00)
+    @State private var elapsedTime: TimeInterval = 0
+    @State private var totalDuration: TimeInterval = 1200 // 20 minutes
+    @State private var isTimerRunning = false
+    @State private var showSummary = false
     
     var body: some View {
         ZStack {
@@ -45,31 +47,46 @@ struct CurrentWorkoutView: View {
                 // Timer Circle
                 ZStack {
                     Circle()
-                        .trim(from: 0.0, to: CGFloat(elapsedTime / totalDuration))
+                        .trim(from: 0.0, to: CGFloat(min(elapsedTime / totalDuration, 1.0)))
                         .stroke(Color.green, lineWidth: 6)
                         .rotationEffect(.degrees(-90))
                         .frame(width: 150, height: 150)
                     
-                    Text("\(timeFormatted(elapsedTime))")
+                    Text(timeFormatted(elapsedTime))
                         .font(.system(size: 30, weight: .bold))
                         .foregroundColor(.white)
                 }
                 .padding()
                 
-                // Stop Button
-                Button(action: {
-                    print("Stop Workout")
-                }) {
-                    Text("STOP")
-                        .font(.title2)
-                        .fontWeight(.bold)
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.red)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
+                // Timer Controls
+                HStack(spacing: 20) {
+                    // Pause/Resume Button
+                    Button(action: toggleTimer) {
+                        Text(isTimerRunning ? "PAUSE" : "RESUME")
+                            .font(.title2)
+                            .fontWeight(.bold)
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Color.blue)
+                            .foregroundColor(.white)
+                            .cornerRadius(10)
+                    }
+                    
+                    // Stop Button (NavigationLink)
+                    NavigationLink(destination: HomePageView(), isActive: $showSummary) {
+                        Button(action: stopWorkout) {
+                            Text("STOP")
+                                .font(.title2)
+                                .fontWeight(.bold)
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .background(Color.red)
+                                .foregroundColor(.white)
+                                .cornerRadius(10)
+                        }
+                    }
                 }
-                .padding(.horizontal, 50)
+                .padding(.horizontal, 20)
                 
                 // Playing Section
                 VStack(alignment: .leading) {
@@ -153,23 +170,37 @@ struct CurrentWorkoutView: View {
                 Spacer()
                 
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            
         }
-        
-        
+        .onAppear(perform: startTimer)
+        .onReceive(Timer.publish(every: 1, on: .main, in: .common).autoconnect()) { _ in
+            if isTimerRunning {
+                elapsedTime += 1
+            }
+        }
     }
-    // Helper function to format time
-    func timeFormatted(_ totalSeconds: TimeInterval) -> String {
+    
+    private func startTimer() {
+        isTimerRunning = true
+    }
+    
+    private func toggleTimer() {
+        isTimerRunning.toggle()
+    }
+    
+    private func stopWorkout() {
+        isTimerRunning = false
+        showSummary = true
+    }
+    
+    private func timeFormatted(_ totalSeconds: TimeInterval) -> String {
         let minutes = Int(totalSeconds) / 60
         let seconds = Int(totalSeconds) % 60
         return String(format: "%02d:%02d", minutes, seconds)
     }
-        
-}
-
-struct WorkoutView_Previews: PreviewProvider {
-    static var previews: some View {
-        CurrentWorkoutView()
+    
+    struct WorkoutView_Previews: PreviewProvider {
+        static var previews: some View {
+            CurrentWorkoutView()
+        }
     }
 }
