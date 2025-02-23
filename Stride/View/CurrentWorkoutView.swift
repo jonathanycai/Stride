@@ -1,36 +1,11 @@
 import SwiftUI
 
-//struct CurrentWorkoutView: View {
-//    var body: some View {
-//
-//        ZStack {
-//            AppColour.main.ignoresSafeArea()
-//
-//            VStack {
-//                Text("Current Workout")
-//                .font(
-//                Font.custom("Inter", size: 40)
-//                .weight(.black)
-//                )
-//                .foregroundColor(Color(red: 0.96, green: 0.96, blue: 0.96))
-//                .frame(width: 312, height: 28, alignment: .topLeading)
-//
-//            }
-//
-//        }
-//    }
-//}
-//
-//#Preview {
-//    CurrentWorkoutView()
-//}
-//
-//
 struct CurrentWorkoutView: View {
     @State private var elapsedTime: TimeInterval = 0
     @State private var totalDuration: TimeInterval = 1200 // 20 minutes
     @State private var isTimerRunning = false
     @State private var showSummary = false
+    @State private var isPaused = false
     
     var body: some View {
         ZStack {
@@ -60,33 +35,50 @@ struct CurrentWorkoutView: View {
                 
                 // Timer Controls
                 HStack(spacing: 20) {
-                    // Pause/Resume Button
-                    Button(action: toggleTimer) {
-                        Text(isTimerRunning ? "PAUSE" : "RESUME")
-                            .font(.title2)
-                            .fontWeight(.bold)
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(Color.blue)
-                            .foregroundColor(.white)
-                            .cornerRadius(10)
-                    }
-                    
-                    // Stop Button (NavigationLink)
-                    NavigationLink(destination: HomePageView(), isActive: $showSummary) {
+                    if isPaused {
+                        // Stop Button
                         Button(action: stopWorkout) {
-                            Text("STOP")
-                                .font(.title2)
-                                .fontWeight(.bold)
-                                .frame(maxWidth: .infinity)
-                                .padding()
-                                .background(Color.red)
+                            Image(systemName: "square.fill")
+                                .font(.title)
                                 .foregroundColor(.white)
-                                .cornerRadius(10)
+                                .padding(20)
+                                .background(Circle().fill(Color.red))
                         }
+                        .transition(.move(edge: .trailing))
+                        
+                        // Resume Button
+                        Button(action: {
+                            withAnimation {
+                                isPaused = false
+                                isTimerRunning = true
+                            }
+                        }) {
+                            Image(systemName: "play.fill")
+                                .font(.title)
+                                .foregroundColor(.white)
+                                .padding(20)
+                                .background(Circle().fill(Color.blue))
+                        }
+                        .transition(.move(edge: .leading))
+                    } else {
+                        // Pause Button
+                        Button(action: {
+                            withAnimation {
+                                isPaused = true
+                                isTimerRunning = false
+                            }
+                        }) {
+                            Image(systemName: "pause.fill")
+                                .font(.title)
+                                .foregroundColor(.white)
+                                .padding(20)
+                                .background(Circle().fill(Color.blue))
+                        }
+                        .transition(.opacity)
                     }
                 }
                 .padding(.horizontal, 20)
+                .frame(height: 80)
                 
                 // Playing Section
                 VStack(alignment: .leading) {
@@ -197,10 +189,11 @@ struct CurrentWorkoutView: View {
         let seconds = Int(totalSeconds) % 60
         return String(format: "%02d:%02d", minutes, seconds)
     }
-    
-    struct WorkoutView_Previews: PreviewProvider {
-        static var previews: some View {
-            CurrentWorkoutView()
-        }
+    }
+
+
+#Preview {
+    NavigationStack {  // Wrap in NavigationStack if using navigation
+        CurrentWorkoutView()
     }
 }
