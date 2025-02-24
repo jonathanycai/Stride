@@ -44,11 +44,14 @@ struct CurrentWorkoutView: View {
                                 .padding(20)
                                 .background(Circle().fill(Color.red))
                         }
-                        .transition(.move(edge: .trailing))
+                        .transition(.asymmetric(
+                            insertion: .move(edge: .leading).combined(with: .opacity),
+                            removal: .opacity
+                        ))
                         
                         // Resume Button
                         Button(action: {
-                            withAnimation {
+                            withAnimation(.spring(duration: 0.3)) {
                                 isPaused = false
                                 isTimerRunning = true
                             }
@@ -59,11 +62,14 @@ struct CurrentWorkoutView: View {
                                 .padding(20)
                                 .background(Circle().fill(Color.blue))
                         }
-                        .transition(.move(edge: .leading))
+                        .transition(.asymmetric(
+                            insertion: .move(edge: .trailing).combined(with: .opacity),
+                            removal: .opacity
+                        ))
                     } else {
                         // Pause Button
                         Button(action: {
-                            withAnimation {
+                            withAnimation(.spring(duration: 0.3)) {
                                 isPaused = true
                                 isTimerRunning = false
                             }
@@ -77,6 +83,7 @@ struct CurrentWorkoutView: View {
                         .transition(.opacity)
                     }
                 }
+                .animation(.default.speed(1.5), value: isPaused) // Add this line
                 .padding(.horizontal, 20)
                 .frame(height: 80)
                 
@@ -189,7 +196,7 @@ struct CurrentWorkoutView: View {
         let seconds = Int(totalSeconds) % 60
         return String(format: "%02d:%02d", minutes, seconds)
     }
-    }
+}
 
 
 #Preview {
