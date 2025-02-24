@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct NavBarView: View {
+    // Use a state variable to track the selected tab; 1 corresponds to Home
+    @State private var selectedTab = 1
+
     init() {
         // Customize Tab Bar Appearance
         let appearance = UITabBarAppearance()
@@ -21,22 +24,23 @@ struct NavBarView: View {
 
     var body: some View {
         NavigationView {
-            TabView {
-                // Profile Tab
-                HomePageView()
+            TabView(selection: $selectedTab) {
+                // Profle Tab
+                Text("Profile View")
+                    .navigationTitle("Profile")
                     .tabItem {
                         Image(systemName: "person.fill")
                         Text("Profile")
                     }
+                    .tag(0)
 
                 // Home Tab
-                Text("Home View")
-                    .navigationTitle("Home")
+                HomePageView()
                     .tabItem {
                         Image(systemName: "house.fill")
-                        Text("Home")
+                        Text("Profile")
                     }
-
+                    .tag(1)
                 // Settings Tab
                 Text("Settings View")
                     .navigationTitle("Settings")
@@ -44,13 +48,13 @@ struct NavBarView: View {
                         Image(systemName: "gearshape.fill")
                         Text("Settings")
                     }
+                    .tag(2)
             }
             .accentColor(.black)
         }
         .background(AppColour.navBarBackground.ignoresSafeArea(edges: .bottom))
     }
 }
-
 
 #Preview {
     NavBarView()
