@@ -4,9 +4,9 @@ struct CurrentWorkoutView: View {
     @State private var elapsedTime: TimeInterval = 0
     @State private var totalDuration: TimeInterval = 1200 // 20 minutes
     @State private var isTimerRunning = false
-    @State private var showSummary = false
     @State private var isPaused = false
-    
+    @State private var showHomePage = false  // state variable for modal presentation
+
     var body: some View {
         ZStack {
             AppColour.main.ignoresSafeArea()
@@ -48,7 +48,7 @@ struct CurrentWorkoutView: View {
                             insertion: .move(edge: .leading).combined(with: .opacity),
                             removal: .opacity
                         ))
-                        
+                                            
                         // Resume Button
                         Button(action: {
                             withAnimation(.spring(duration: 0.3)) {
@@ -83,7 +83,7 @@ struct CurrentWorkoutView: View {
                         .transition(.opacity)
                     }
                 }
-                .animation(.default.speed(1.5), value: isPaused) // Add this line
+                .animation(.default.speed(1.5), value: isPaused)
                 .padding(.horizontal, 20)
                 .frame(height: 80)
                 
@@ -167,7 +167,6 @@ struct CurrentWorkoutView: View {
                 .padding(.horizontal)
                 
                 Spacer()
-                
             }
         }
         .onAppear(perform: startTimer)
@@ -176,19 +175,19 @@ struct CurrentWorkoutView: View {
                 elapsedTime += 1
             }
         }
+        // Present HomePageView modally with no back option
+        .fullScreenCover(isPresented: $showHomePage) {
+            NavBarView()
+        }
     }
     
     private func startTimer() {
         isTimerRunning = true
     }
     
-    private func toggleTimer() {
-        isTimerRunning.toggle()
-    }
-    
     private func stopWorkout() {
         isTimerRunning = false
-        showSummary = true
+        showHomePage = true
     }
     
     private func timeFormatted(_ totalSeconds: TimeInterval) -> String {
@@ -198,9 +197,8 @@ struct CurrentWorkoutView: View {
     }
 }
 
-
-#Preview {
-    NavigationStack {  // Wrap in NavigationStack if using navigation
+struct CurrentWorkoutView_Previews: PreviewProvider {
+    static var previews: some View {
         CurrentWorkoutView()
     }
 }

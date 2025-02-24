@@ -23,7 +23,7 @@ struct NavBarView: View {
         NavigationView {
             TabView {
                 // Profile Tab
-                NewWorkoutView()
+                HomePageView()
                     .tabItem {
                         Image(systemName: "person.fill")
                         Text("Profile")
