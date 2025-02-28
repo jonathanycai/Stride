@@ -7,9 +7,15 @@ struct SettingsView: View {
     
     var body: some View {
         ZStack {
+            
             AppColour.main.ignoresSafeArea()
             
             VStack(spacing: 20) {
+                
+                
+                
+                
+                
                 // Change Email Button
                 SettingsButton(title: "Change Email") {
                     showEmailPopup = true
@@ -28,12 +34,12 @@ struct SettingsView: View {
                 Spacer()
             }
             .padding(.top, 40)
-        }
-        .sheet(isPresented: $showEmailPopup) {
-            EmailChangePopup(isPresented: $showEmailPopup)
-        }
-        .sheet(isPresented: $showPasswordPopup) {
-            PasswordChangePopup(isPresented: $showPasswordPopup)
+            .transparentSheet(isPresented: $showEmailPopup) {
+                EmailChangePopup(isPresented: $showEmailPopup)
+            }
+            .transparentSheet(isPresented: $showPasswordPopup) {
+                PasswordChangePopup(isPresented: $showPasswordPopup)
+            }
         }
         .alert("Delete Account", isPresented: $showDeleteConfirmation) {
             Button("Cancel", role: .cancel) {}
@@ -42,26 +48,12 @@ struct SettingsView: View {
             }
         } message: {
             Text("Are you sure you want to delete your account? This action cannot be undone.")
+                .foregroundColor(AppColour.headerText)
         }
     }
 }
 
-
-struct ColouredForm: ViewModifier {
-    func body(content: Content) -> some View {
-        content
-            .scrollContentBackground(.hidden)
-            .background(AppColour.main)
-            .onAppear {
-                // Style UITableView components (for Form)
-                UITableView.appearance().backgroundColor = UIColor(AppColour.main)
-                UITableViewCell.appearance().backgroundColor = UIColor(AppColour.main)
-                UITableView.appearance().separatorColor = UIColor(AppColour.headerText)
-            }
-    }
-}
-
-
+// MARK: - Components
 struct SettingsButton: View {
     let title: String
     var isDestructive: Bool = false
@@ -96,28 +88,34 @@ struct EmailChangePopup: View {
     var body: some View {
         NavigationView {
             Form {
-                SecureField("Current Password", text: $currentPassword)
-                TextField("New Email", text: $newEmail)
-                    .keyboardType(.emailAddress)
-                TextField("Confirm New Email", text: $confirmEmail)
-                    .keyboardType(.emailAddress)
+                Section {
+                    CustomTextField(title: "Current Password", text: $currentPassword, isSecure: true)
+                    CustomTextField(title: "New Email", text: $newEmail, isSecure: false)
+                        .keyboardType(.emailAddress)
+                    CustomTextField(title: "Confirm New Email", text: $confirmEmail, isSecure: false)
+                        .keyboardType(.emailAddress)
+                }
+                .listRowBackground(AppColour.buttonBackground)
             }
-            .modifier(ColouredForm())
+            .modifier(DarkFormModifier())
             .navigationTitle("Change Email")
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") {
                         isPresented = false
                     }
+                    .foregroundColor(.white)
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Submit") {
-                        // Add validation logic here
                         isPresented = false
                     }
+                    .foregroundColor(.white)
                 }
             }
         }
+        .colorScheme(.dark)
     }
 }
 
@@ -130,27 +128,97 @@ struct PasswordChangePopup: View {
     var body: some View {
         NavigationView {
             Form {
-                SecureField("Current Password", text: $currentPassword)
-                SecureField("New Password", text: $newPassword)
-                SecureField("Confirm New Password", text: $confirmPassword)
+                Section {
+                    CustomTextField(title: "Current Password", text: $currentPassword, isSecure: true)
+                    CustomTextField(title: "New Password", text: $newPassword, isSecure: true)
+                    CustomTextField(title: "Confirm New Password", text: $confirmPassword, isSecure: true)
+                }
+                .listRowBackground(AppColour.buttonBackground)
             }
-            .modifier(ColouredForm())
+            .modifier(DarkFormModifier())
             .navigationTitle("Change Password")
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") {
                         isPresented = false
                     }
+                    .foregroundColor(.white)
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Submit") {
-                        // Add validation logic here
                         isPresented = false
                     }
+                    .foregroundColor(.white)
                 }
             }
         }
+        .colorScheme(.dark)
     }
+}
+
+struct CustomTextField: View {
+    let title: String
+    @Binding var text: String
+    var isSecure: Bool
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+            Text(title)
+                .foregroundColor(.white.opacity(0.7))
+                .font(.caption)
+            
+            if isSecure {
+                SecureField("", text: $text)
+                    .foregroundColor(.white)
+                    .textFieldStyle(.plain)
+            } else {
+                TextField("", text: $text)
+                    .foregroundColor(.white)
+                    .textFieldStyle(.plain)
+            }
+            
+            Divider()
+                .background(Color.white.opacity(0.3))
+        }
+        .padding(.vertical, 8)
+    }
+}
+
+// MARK: - Modifiers
+struct DarkFormModifier: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .scrollContentBackground(.hidden)
+            .background(AppColour.main)
+            .onAppear {
+                UITableView.appearance().backgroundColor = UIColor(AppColour.main)
+                UITableView.appearance().separatorColor = .clear
+            }
+    }
+}
+
+extension View {
+    func transparentSheet<Content: View>(isPresented: Binding<Bool>, content: @escaping () -> Content) -> some View {
+        self.sheet(isPresented: isPresented) {
+            content()
+                .background(TransparentBackground())
+                .presentationDetents([.medium])
+                .presentationDragIndicator(.hidden)
+        }
+    }
+}
+
+struct TransparentBackground: UIViewRepresentable {
+    func makeUIView(context: Context) -> UIView {
+        let view = UIView()
+        DispatchQueue.main.async {
+            view.superview?.superview?.backgroundColor = .clear
+        }
+        return view
+    }
+    
+    func updateUIView(_ uiView: UIView, context: Context) {}
 }
 
 #Preview {
