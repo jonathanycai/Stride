@@ -2,10 +2,15 @@ import SwiftUI
 
 struct CurrentWorkoutView: View {
     @State private var elapsedTime: TimeInterval = 0
-    @State private var totalDuration: TimeInterval = 1200 // 20 minutes
-    @State private var isTimerRunning = false
-    @State private var isPaused = false
-    @State private var showHomePage = false  // state variable for modal presentation
+        @State private var totalDuration: TimeInterval
+        @State private var isTimerRunning = false
+        @State private var isPaused = false
+        @State private var showHomePage = false
+
+        // Modified initializer to accept duration
+        init(totalDuration: TimeInterval) {
+            _totalDuration = State(initialValue: totalDuration)
+        }
 
     var body: some View {
         ZStack {
@@ -48,7 +53,7 @@ struct CurrentWorkoutView: View {
                             insertion: .move(edge: .leading).combined(with: .opacity),
                             removal: .opacity
                         ))
-                                            
+                        
                         // Resume Button
                         Button(action: {
                             withAnimation(.spring(duration: 0.3)) {
@@ -159,14 +164,14 @@ struct CurrentWorkoutView: View {
                                 .foregroundColor(.white)
                                 .font(.subheadline)
                         }
+                        
+                        Spacer()
                     }
                     .padding()
                     .background(Color.gray.opacity(0.3))
                     .cornerRadius(10)
                 }
                 .padding(.horizontal)
-                
-                Spacer()
             }
         }
         .onAppear(perform: startTimer)
@@ -199,6 +204,6 @@ struct CurrentWorkoutView: View {
 
 struct CurrentWorkoutView_Previews: PreviewProvider {
     static var previews: some View {
-        CurrentWorkoutView()
+        CurrentWorkoutView(totalDuration: 1200)
     }
 }

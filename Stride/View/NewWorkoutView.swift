@@ -15,8 +15,6 @@ struct NewWorkoutView: View {
     @State private var isEditing = false
     
     var body: some View {
-
-        
         ZStack {
             AppColour.main.ignoresSafeArea()
             
@@ -242,7 +240,7 @@ struct NewWorkoutView: View {
                     .padding()
                     .foregroundColor(AppColour.headerText)
                 }
-                NavigationLink(destination: CurrentWorkoutView()) {
+                NavigationLink(destination: CurrentWorkoutView(totalDuration: TimeInterval((workoutDuration ?? 20) * 60))) {
                     Text("BEGIN WORKOUT")
                         .font(.headline)
                         .foregroundColor(.black)
@@ -252,7 +250,8 @@ struct NewWorkoutView: View {
                         .cornerRadius(15)
                         .padding(.horizontal)
                 }
-                .padding(.bottom) // Adds spacing from the screen bottom
+                .disabled(workoutDuration == nil)  // Optional: Disable button if invalid duration
+                .padding(.bottom)
             }
         }
     }
