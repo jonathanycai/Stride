@@ -26,7 +26,7 @@ struct NavBarView: View {
         NavigationView {
             TabView(selection: $selectedTab) {
                 // Profle Tab
-                Text("Profile View")
+                UserProfileView()
                     .navigationTitle("Profile")
                     .tabItem {
                         Image(systemName: "person.fill")
@@ -38,7 +38,7 @@ struct NavBarView: View {
                 HomePageView()
                     .tabItem {
                         Image(systemName: "house.fill")
-                        Text("Profile")
+                        Text("Home")
                     }
                     .tag(1)
                 // Settings Tab
