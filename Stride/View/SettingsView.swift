@@ -7,23 +7,21 @@ struct SettingsView: View {
     
     var body: some View {
         ZStack {
-            
             AppColour.main.ignoresSafeArea()
             
             VStack(spacing: 20) {
-                
-                
-                
-                
-                
                 // Change Email Button
                 SettingsButton(title: "Change Email") {
-                    showEmailPopup = true
+                    withAnimation {
+                        showEmailPopup = true
+                    }
                 }
                 
                 // Change Password Button
                 SettingsButton(title: "Change Password") {
-                    showPasswordPopup = true
+                    withAnimation {
+                        showPasswordPopup = true
+                    }
                 }
                 
                 // Delete Account Button
@@ -34,13 +32,23 @@ struct SettingsView: View {
                 Spacer()
             }
             .padding(.top, 40)
-            .transparentSheet(isPresented: $showEmailPopup) {
+            
+            // Email Change Popup
+            if showEmailPopup {
                 EmailChangePopup(isPresented: $showEmailPopup)
+                    .transition(.move(edge: .top))
+                    .zIndex(1)
             }
-            .transparentSheet(isPresented: $showPasswordPopup) {
+            
+            // Password Change Popup
+            if showPasswordPopup {
                 PasswordChangePopup(isPresented: $showPasswordPopup)
+                    .transition(.move(edge: .top))
+                    .zIndex(1)
             }
         }
+        .animation(.easeInOut, value: showEmailPopup)
+        .animation(.easeInOut, value: showPasswordPopup)
         .alert("Delete Account", isPresented: $showDeleteConfirmation) {
             Button("Cancel", role: .cancel) {}
             Button("Delete", role: .destructive) {
@@ -86,36 +94,55 @@ struct EmailChangePopup: View {
     @State private var confirmEmail = ""
     
     var body: some View {
-        NavigationView {
-            Form {
-                Section {
-                    CustomTextField(title: "Current Password", text: $currentPassword, isSecure: true)
-                    CustomTextField(title: "New Email", text: $newEmail, isSecure: false)
-                        .keyboardType(.emailAddress)
-                    CustomTextField(title: "Confirm New Email", text: $confirmEmail, isSecure: false)
-                        .keyboardType(.emailAddress)
+        VStack(spacing: 0) {
+            // Header
+            HStack {
+                Button("Cancel") {
+                    withAnimation {
+                        isPresented = false
+                    }
                 }
-                .listRowBackground(AppColour.buttonBackground)
+                .foregroundColor(.white)
+                
+                Spacer()
+                
+                Text("Change Email")
+                    .font(.headline)
+                    .foregroundColor(.white)
+                
+                Spacer()
+                
+                Button("Submit") {
+                    // Add submit logic
+                    withAnimation {
+                        isPresented = false
+                    }
+                }
+                .foregroundColor(.white)
             }
-            .modifier(DarkFormModifier())
-            .navigationTitle("Change Email")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") {
-                        isPresented = false
+            .padding()
+            .background(AppColour.main)
+            
+            ScrollView {
+                Form {
+                    Section {
+                        CustomTextField(title: "Current Password", text: $currentPassword, isSecure: true)
+                        CustomTextField(title: "New Email", text: $newEmail, isSecure: false)
+                            .keyboardType(.emailAddress)
+                        CustomTextField(title: "Confirm New Email", text: $confirmEmail, isSecure: false)
+                            .keyboardType(.emailAddress)
                     }
-                    .foregroundColor(.white)
+                    .listRowBackground(AppColour.buttonBackground)
                 }
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Submit") {
-                        isPresented = false
-                    }
-                    .foregroundColor(.white)
-                }
+                .modifier(DarkFormModifier())
+                .frame(height: UIScreen.main.bounds.height * 0.6)
             }
         }
-        .colorScheme(.dark)
+        .background(AppColour.main)
+        .cornerRadius(20)
+        .shadow(radius: 20)
+        .padding(.horizontal, 10)
+        .padding(.top, 60)
     }
 }
 
@@ -126,34 +153,53 @@ struct PasswordChangePopup: View {
     @State private var confirmPassword = ""
     
     var body: some View {
-        NavigationView {
-            Form {
-                Section {
-                    CustomTextField(title: "Current Password", text: $currentPassword, isSecure: true)
-                    CustomTextField(title: "New Password", text: $newPassword, isSecure: true)
-                    CustomTextField(title: "Confirm New Password", text: $confirmPassword, isSecure: true)
+        VStack(spacing: 0) {
+            // Header
+            HStack {
+                Button("Cancel") {
+                    withAnimation {
+                        isPresented = false
+                    }
                 }
-                .listRowBackground(AppColour.buttonBackground)
+                .foregroundColor(.white)
+                
+                Spacer()
+                
+                Text("Change Password")
+                    .font(.headline)
+                    .foregroundColor(.white)
+                
+                Spacer()
+                
+                Button("Submit") {
+                    // Add submit logic
+                    withAnimation {
+                        isPresented = false
+                    }
+                }
+                .foregroundColor(.white)
             }
-            .modifier(DarkFormModifier())
-            .navigationTitle("Change Password")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") {
-                        isPresented = false
+            .padding()
+            .background(AppColour.main)
+            
+            ScrollView {
+                Form {
+                    Section {
+                        CustomTextField(title: "Current Password", text: $currentPassword, isSecure: true)
+                        CustomTextField(title: "New Password", text: $newPassword, isSecure: true)
+                        CustomTextField(title: "Confirm New Password", text: $confirmPassword, isSecure: true)
                     }
-                    .foregroundColor(.white)
+                    .listRowBackground(AppColour.buttonBackground)
                 }
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Submit") {
-                        isPresented = false
-                    }
-                    .foregroundColor(.white)
-                }
+                .modifier(DarkFormModifier())
+                .frame(height: UIScreen.main.bounds.height * 0.6)
             }
         }
-        .colorScheme(.dark)
+        .background(AppColour.main)
+        .cornerRadius(20)
+        .shadow(radius: 20)
+        .padding(.horizontal, 10)
+        .padding(.top, 60)
     }
 }
 
@@ -196,29 +242,6 @@ struct DarkFormModifier: ViewModifier {
                 UITableView.appearance().separatorColor = .clear
             }
     }
-}
-
-extension View {
-    func transparentSheet<Content: View>(isPresented: Binding<Bool>, content: @escaping () -> Content) -> some View {
-        self.sheet(isPresented: isPresented) {
-            content()
-                .background(TransparentBackground())
-                .presentationDetents([.medium])
-                .presentationDragIndicator(.hidden)
-        }
-    }
-}
-
-struct TransparentBackground: UIViewRepresentable {
-    func makeUIView(context: Context) -> UIView {
-        let view = UIView()
-        DispatchQueue.main.async {
-            view.superview?.superview?.backgroundColor = .clear
-        }
-        return view
-    }
-    
-    func updateUIView(_ uiView: UIView, context: Context) {}
 }
 
 #Preview {

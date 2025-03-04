@@ -42,7 +42,7 @@ struct NavBarView: View {
                     }
                     .tag(1)
                 // Settings Tab
-                Text("Settings View")
+                SettingsView()
                     .navigationTitle("Settings")
                     .tabItem {
                         Image(systemName: "gearshape.fill")
