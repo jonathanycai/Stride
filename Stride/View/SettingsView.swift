@@ -18,7 +18,10 @@ struct SettingsView: View {
                     .padding(.horizontal)
                     .padding(.top, 20)
                 
-                VStack(spacing: 24) {
+                Divider()
+                    .background(AppColour.headerText.opacity(0.2))
+                
+                VStack(spacing: 18) {
                     // Change Email Section
                     VStack(alignment: .leading, spacing: 8) {
                         Text("Change Email")
@@ -33,8 +36,9 @@ struct SettingsView: View {
                         }
                         
                         Divider()
+                            .frame(height: 1)
                             .background(AppColour.headerText.opacity(0.2))
-                            .padding(.horizontal)
+                            .padding(.top)
                     }
                     
                     // Change Password Section
@@ -51,8 +55,9 @@ struct SettingsView: View {
                         }
                         
                         Divider()
+                            .frame(height: 1)
                             .background(AppColour.headerText.opacity(0.2))
-                            .padding(.horizontal)
+                            .padding(.top)
                     }
                     
                     // Delete Account Section
@@ -67,8 +72,9 @@ struct SettingsView: View {
                         }
                         
                         Divider()
-                            .background(AppColour.headerText.opacity(0.2))
-                            .padding(.horizontal)
+                            .frame(height: 1)
+                            .background(AppColour.lightButtonBackground.opacity(0.2))
+                            .padding(.top)
                     }
                 }
                 .padding(.top, 10)
