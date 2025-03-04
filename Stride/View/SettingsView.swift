@@ -10,28 +10,71 @@ struct SettingsView: View {
             AppColour.main.ignoresSafeArea()
             
             VStack(spacing: 20) {
-                // Change Email Button
-                SettingsButton(title: "Change Email") {
-                    withAnimation {
-                        showEmailPopup = true
+                // Header
+                Text("Settings")
+                    .font(.system(size: 34, weight: .bold))
+                    .foregroundColor(AppColour.headerText)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.horizontal)
+                    .padding(.top, 20)
+                
+                VStack(spacing: 24) {
+                    // Change Email Section
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Change Email")
+                            .font(.system(size: 16, weight: .medium))
+                            .foregroundColor(AppColour.headerText.opacity(0.9))
+                            .padding(.horizontal)
+                        
+                        SettingsButton(title: "Change Email") {
+                            withAnimation {
+                                showEmailPopup = true
+                            }
+                        }
+                        
+                        Divider()
+                            .background(AppColour.headerText.opacity(0.2))
+                            .padding(.horizontal)
+                    }
+                    
+                    // Change Password Section
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Change Password")
+                            .font(.system(size: 16, weight: .medium))
+                            .foregroundColor(AppColour.headerText.opacity(0.9))
+                            .padding(.horizontal)
+                        
+                        SettingsButton(title: "Change Password") {
+                            withAnimation {
+                                showPasswordPopup = true
+                            }
+                        }
+                        
+                        Divider()
+                            .background(AppColour.headerText.opacity(0.2))
+                            .padding(.horizontal)
+                    }
+                    
+                    // Delete Account Section
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Delete Account")
+                            .font(.system(size: 16, weight: .medium))
+                            .foregroundColor(AppColour.headerText.opacity(0.9))
+                            .padding(.horizontal)
+                        
+                        SettingsButton(title: "Delete Account", isDestructive: true) {
+                            showDeleteConfirmation = true
+                        }
+                        
+                        Divider()
+                            .background(AppColour.headerText.opacity(0.2))
+                            .padding(.horizontal)
                     }
                 }
-                
-                // Change Password Button
-                SettingsButton(title: "Change Password") {
-                    withAnimation {
-                        showPasswordPopup = true
-                    }
-                }
-                
-                // Delete Account Button
-                SettingsButton(title: "Delete Account", isDestructive: true) {
-                    showDeleteConfirmation = true
-                }
+                .padding(.top, 10)
                 
                 Spacer()
             }
-            .padding(.top, 40)
             
             // Email Change Popup
             if showEmailPopup {
