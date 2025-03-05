@@ -1,9 +1,9 @@
 import SwiftUI
 
 struct SettingsView: View {
-    @State private var showEmailPopup = false
-    @State private var showPasswordPopup = false
-    @State private var showDeleteConfirmation = false
+    // Use @StateObject if this is the root creation of the ViewModel.
+    // If it's injected from a parent, use @ObservedObject instead.
+    @StateObject private var viewModel = SettingsViewModel()
     
     var body: some View {
         ZStack {
@@ -19,9 +19,13 @@ struct SettingsView: View {
                     .padding(.top, 20)
                 
                 Divider()
+                    // Example: make the divider thicker
+                    .frame(height: 2)
                     .background(AppColour.headerText.opacity(0.2))
                 
+                // Main content
                 VStack(spacing: 18) {
+                    
                     // Change Email Section
                     VStack(alignment: .leading, spacing: 8) {
                         Text("Change Email")
@@ -29,10 +33,8 @@ struct SettingsView: View {
                             .foregroundColor(AppColour.headerText.opacity(0.9))
                             .padding(.horizontal)
                         
-                        SettingsButton(title: "Change Email") {
-                            withAnimation {
-                                showEmailPopup = true
-                            }
+                        SettingsButtonView(title: "Change Email") {
+                            viewModel.openEmailPopup()
                         }
                         
                         Divider()
@@ -48,10 +50,8 @@ struct SettingsView: View {
                             .foregroundColor(AppColour.headerText.opacity(0.9))
                             .padding(.horizontal)
                         
-                        SettingsButton(title: "Change Password") {
-                            withAnimation {
-                                showPasswordPopup = true
-                            }
+                        SettingsButtonView(title: "Change Password") {
+                            viewModel.openPasswordPopup()
                         }
                         
                         Divider()
@@ -67,8 +67,8 @@ struct SettingsView: View {
                             .foregroundColor(AppColour.headerText.opacity(0.9))
                             .padding(.horizontal)
                         
-                        SettingsButton(title: "Delete Account", isDestructive: true) {
-                            showDeleteConfirmation = true
+                        SettingsButtonView(title: "Delete Account", isDestructive: true) {
+                            viewModel.confirmDeleteAccount()
                         }
                         
                         Divider()
@@ -83,213 +83,33 @@ struct SettingsView: View {
             }
             
             // Email Change Popup
-            if showEmailPopup {
-                EmailChangePopup(isPresented: $showEmailPopup)
+            if viewModel.showEmailPopup {
+                EmailChangePopupView(viewModel: viewModel)
                     .transition(.move(edge: .top))
                     .zIndex(1)
             }
             
             // Password Change Popup
-            if showPasswordPopup {
-                PasswordChangePopup(isPresented: $showPasswordPopup)
+            if viewModel.showPasswordPopup {
+                PasswordChangePopupView(viewModel: viewModel)
                     .transition(.move(edge: .top))
                     .zIndex(1)
             }
         }
-        .animation(.easeInOut, value: showEmailPopup)
-        .animation(.easeInOut, value: showPasswordPopup)
-        .alert("Delete Account", isPresented: $showDeleteConfirmation) {
+        // Animate changes to show/hide popups
+        .animation(.easeInOut, value: viewModel.showEmailPopup)
+        .animation(.easeInOut, value: viewModel.showPasswordPopup)
+        
+        // Delete confirmation alert
+        .alert("Delete Account", isPresented: $viewModel.showDeleteConfirmation) {
             Button("Cancel", role: .cancel) {}
             Button("Delete", role: .destructive) {
-                // Add delete logic here
+                viewModel.deleteAccount()
             }
         } message: {
             Text("Are you sure you want to delete your account? This action cannot be undone.")
                 .foregroundColor(AppColour.headerText)
         }
-    }
-}
-
-// MARK: - Components
-struct SettingsButton: View {
-    let title: String
-    var isDestructive: Bool = false
-    let action: () -> Void
-    
-    var body: some View {
-        Button(action: action) {
-            HStack {
-                Text(title)
-                    .foregroundColor(isDestructive ? .red : AppColour.headerText)
-                    .font(.system(size: 18, weight: .semibold))
-                
-                Spacer()
-                
-                Image(systemName: "chevron.right")
-                    .foregroundColor(.gray)
-            }
-            .padding()
-            .background(AppColour.buttonBackground)
-            .cornerRadius(10)
-            .padding(.horizontal)
-        }
-    }
-}
-
-struct EmailChangePopup: View {
-    @Binding var isPresented: Bool
-    @State private var currentPassword = ""
-    @State private var newEmail = ""
-    @State private var confirmEmail = ""
-    
-    var body: some View {
-        VStack(spacing: 0) {
-            // Header
-            HStack {
-                Button("Cancel") {
-                    withAnimation {
-                        isPresented = false
-                    }
-                }
-                .foregroundColor(.white)
-                
-                Spacer()
-                
-                Text("Change Email")
-                    .font(.headline)
-                    .foregroundColor(.white)
-                
-                Spacer()
-                
-                Button("Submit") {
-                    // Add submit logic
-                    withAnimation {
-                        isPresented = false
-                    }
-                }
-                .foregroundColor(.white)
-            }
-            .padding()
-            .background(AppColour.main)
-            
-            ScrollView {
-                Form {
-                    Section {
-                        CustomTextField(title: "Current Password", text: $currentPassword, isSecure: true)
-                        CustomTextField(title: "New Email", text: $newEmail, isSecure: false)
-                            .keyboardType(.emailAddress)
-                        CustomTextField(title: "Confirm New Email", text: $confirmEmail, isSecure: false)
-                            .keyboardType(.emailAddress)
-                    }
-                    .listRowBackground(AppColour.buttonBackground)
-                }
-                .modifier(DarkFormModifier())
-                .frame(height: UIScreen.main.bounds.height * 0.6)
-            }
-        }
-        .background(AppColour.main)
-        .cornerRadius(20)
-        .shadow(radius: 20)
-        .padding(.horizontal, 10)
-        .padding(.top, 60)
-    }
-}
-
-struct PasswordChangePopup: View {
-    @Binding var isPresented: Bool
-    @State private var currentPassword = ""
-    @State private var newPassword = ""
-    @State private var confirmPassword = ""
-    
-    var body: some View {
-        VStack(spacing: 0) {
-            // Header
-            HStack {
-                Button("Cancel") {
-                    withAnimation {
-                        isPresented = false
-                    }
-                }
-                .foregroundColor(.white)
-                
-                Spacer()
-                
-                Text("Change Password")
-                    .font(.headline)
-                    .foregroundColor(.white)
-                
-                Spacer()
-                
-                Button("Submit") {
-                    // Add submit logic
-                    withAnimation {
-                        isPresented = false
-                    }
-                }
-                .foregroundColor(.white)
-            }
-            .padding()
-            .background(AppColour.main)
-            
-            ScrollView {
-                Form {
-                    Section {
-                        CustomTextField(title: "Current Password", text: $currentPassword, isSecure: true)
-                        CustomTextField(title: "New Password", text: $newPassword, isSecure: true)
-                        CustomTextField(title: "Confirm New Password", text: $confirmPassword, isSecure: true)
-                    }
-                    .listRowBackground(AppColour.buttonBackground)
-                }
-                .modifier(DarkFormModifier())
-                .frame(height: UIScreen.main.bounds.height * 0.6)
-            }
-        }
-        .background(AppColour.main)
-        .cornerRadius(20)
-        .shadow(radius: 20)
-        .padding(.horizontal, 10)
-        .padding(.top, 60)
-    }
-}
-
-struct CustomTextField: View {
-    let title: String
-    @Binding var text: String
-    var isSecure: Bool
-    
-    var body: some View {
-        VStack(alignment: .leading) {
-            Text(title)
-                .foregroundColor(.white.opacity(0.7))
-                .font(.caption)
-            
-            if isSecure {
-                SecureField("", text: $text)
-                    .foregroundColor(.white)
-                    .textFieldStyle(.plain)
-            } else {
-                TextField("", text: $text)
-                    .foregroundColor(.white)
-                    .textFieldStyle(.plain)
-            }
-            
-            Divider()
-                .background(Color.white.opacity(0.3))
-        }
-        .padding(.vertical, 8)
-    }
-}
-
-// MARK: - Modifiers
-struct DarkFormModifier: ViewModifier {
-    func body(content: Content) -> some View {
-        content
-            .scrollContentBackground(.hidden)
-            .background(AppColour.main)
-            .onAppear {
-                UITableView.appearance().backgroundColor = UIColor(AppColour.main)
-                UITableView.appearance().separatorColor = .clear
-            }
     }
 }
 
